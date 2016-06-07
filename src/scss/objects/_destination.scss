@@ -14,9 +14,21 @@
   border-right: 1px solid #ccc;
   display: flex;
   flex: 1 1 auto;
+  font-size: 40px;
   justify-content: center;
+  position: relative;
 
   &:last-child {
     border: none;
   }
+}
+
+.no-start:after {
+  content: '🚫';
+  font-size: 1.5em;
+  left: 50%;
+  opacity: .8;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -38%);
 }
