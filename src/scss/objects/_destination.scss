@@ -3,14 +3,18 @@
   bottom: 0;
   box-shadow: 0 -4px 10px 1px rgba(0, 0, 0, .1);
   display: flex;
-  height: 15vh;
-  position: absolute;
+  height: $dest-height;
+  position: fixed;
   width: 100%;
 
   user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
+
+  @include max-screen(map-get($breakpoints, miniDesktop)) {
+    max-height: ($dest-height / 1vh) * ($tablet-max-height / 100) * 1px
+  }
 }
 
 .dest-opt {

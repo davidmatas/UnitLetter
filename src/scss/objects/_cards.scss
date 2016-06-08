@@ -11,6 +11,10 @@
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
+
+  @include max-screen(map-get($breakpoints, miniDesktop)) {
+    max-height: ($card-holder-height / 1vh) * ($tablet-max-height / 100) * 1px
+  }
 }
 
 .card {
@@ -18,10 +22,15 @@
   border-radius: 5px;
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, .1);
   display: flex;
-  height: calc(#{$card-height - $dest-height});
+  height: calc(#{$card-height} - #{20px});
   justify-content: center;
   margin: 10px;
   width: 22%;
+  @include accelerate(transform);
+
+  @include max-screen(map-get($breakpoints, miniDesktop)) {
+    max-height: calc(#{($card-height / 1vh) * ($tablet-max-height / 100) * 1px} - #{20px})
+  }
 
   &:hover {
     cursor: grab;

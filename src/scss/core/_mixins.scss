@@ -1,0 +1,18 @@
+@mixin max-screen($bp) {
+  @media(max-width: #{$bp}px) {
+    @content;
+  }
+}
+
+@mixin min-screen($bp) {
+  @media(min-width: #{$bp}px) {
+    @content;
+  }
+}
+
+@mixin accelerate($name) {
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translateZ(0);
+  will-change: $name;
+}

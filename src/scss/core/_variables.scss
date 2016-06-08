@@ -1,3 +1,14 @@
-$card-holder-height: 85vh;
+// === BREAKPOINTS ===
+$breakpoints: (
+  phone       : 400,
+  phablet     : 640,
+  tablet      : 800,
+  miniDesktop : 1024,
+  bigScreen   : 1300
+);
+
+// === GLOBALS ===
 $dest-height: 15vh;
-$card-height: 100vh / 3;
+$card-holder-height: 100vh - $dest-height;
+$card-height: $card-holder-height / 3;
+$tablet-max-height: 671;
