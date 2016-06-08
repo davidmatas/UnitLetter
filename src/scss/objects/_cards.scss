@@ -6,8 +6,11 @@
   justify-content: center;
   margin: 0 auto;
   max-width: 1024px;
-  overflow: auto;
   width: 100%;
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
 }
 
 .card {
