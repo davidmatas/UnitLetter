@@ -1,6 +1,7 @@
 class Drag {
   constructor (el) {
     touch(document, 'add', 'mousedown', (e) => {
+      if (e.which > 1) return;
       this.target = e.target;
       this.posOrigin = getPositionEvent(e);
       this.moving = this.createMoving.bind(this);
