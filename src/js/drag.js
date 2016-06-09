@@ -12,9 +12,14 @@ class Drag {
 
     touch(document, 'add', 'mousedown', (e) => {
       if (e.which > 1) return;
-      this.target = e.target;
-      this.posOrigin = getPositionEvent(e);
-      if (this.target.matches(el)) {
+      if (e.target.matches(el)) {
+        let ePos = getPositionEvent(e);
+        this.holders = this.holders.map((item) => {
+          if (eventInsideArea(ePos, item.coords)) item.origin = true;
+          return item;
+        });
+        this.target = e.target;
+        this.posOrigin = getPositionEvent(e);
         this.addEvents();
       }
     })
@@ -38,15 +43,15 @@ class Drag {
   }
   deleteMoving (e) {
     let ePos = getPositionEvent(e);
-    let holder = this.holders.reduce((prev, item) => {
-      if ((item.coords.left <= ePos.clientX ) && ( ePos.clientX <= item.coords.right) && (item.coords.top <= ePos.clientY) && (ePos.clientY <= item.coords.bottom)) {
-        prev = item.el;
+    let holder = this.holders.filter(item => {
+      if (item.origin) item.origin = false
+      else {
+        return eventInsideArea(ePos, item.coords)
       }
-      return prev;
-    }, null);
+    });
 
-    if(holder) {
-      holder.appendChild(this.target);
+    if(holder.length > 0) {
+      holder[0].el.appendChild(this.target);
     }
 
     this.target.style.transform = 'translate(0, 0)';
@@ -55,6 +60,10 @@ class Drag {
 }
 
 // Helper functions for Drag class
+
+function eventInsideArea(e, area) {
+  return (area.left <= e.clientX ) && ( e.clientX <= area.right) && (area.top <= e.clientY) && (e.clientY <= area.bottom)
+}
 
 function getPositionEvent(e) {
   let {clientX, clientY} = e.touches ? e.touches[0] || e.changedTouches[0] : e;
