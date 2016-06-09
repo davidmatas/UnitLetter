@@ -28,6 +28,10 @@
   width: 100px;
   @include accelerate(transform);
 
+  &.win {
+    box-shadow: inset 0px 0px 0px 10px #00BCD4;
+  }
+
   &:hover {
     cursor: grab;
     cursor: -webkit-grab;

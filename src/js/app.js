@@ -1,4 +1,3 @@
 import '../scss/style.scss';
-import Drag from './drag';
-
-new Drag('.card', '.dest-holder, .card-holder');
+import UnitLetters from './unit';
+new UnitLetters('.card-holder', 'dest-holder')

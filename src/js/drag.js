@@ -1,28 +1,34 @@
 class Drag {
-  constructor (el, holder) {
-    this.holders = Array.from(document.querySelectorAll(holder)).map(item => (
+  constructor (el, holder, cb) {
+    this.el       = el;
+    this.cb       = cb;
+    this.moving   = this.createMoving.bind(this);
+    this.unmoving = this.deleteMoving.bind(this);
+    this.start    = this.init.bind(this);
+    this.holders  = Array.from(document.querySelectorAll(holder.join(', '))).map(item => (
       {
         el: item,
         coords: item.getBoundingClientRect()
       }
-    ))
+    ));
+    this.last;
+    this.target;
+    this.posOrigin;
 
-    this.moving = this.createMoving.bind(this);
-    this.unmoving = this.deleteMoving.bind(this);
-
-    touch(document, 'add', 'mousedown', (e) => {
-      if (e.which > 1) return;
-      if (e.target.matches(el)) {
-        let ePos = getPositionEvent(e);
-        this.holders = this.holders.map((item) => {
-          if (eventInsideArea(ePos, item.coords)) item.origin = true;
-          return item;
-        });
-        this.target = e.target;
-        this.posOrigin = getPositionEvent(e);
-        this.addEvents();
-      }
-    })
+    touch(document, 'add', 'mousedown', this.start)
+  }
+  init (e) {
+    if (e.which > 1) return;
+    if (e.target.matches(this.el)) {
+      let ePos = getPositionEvent(e);
+      this.holders = this.holders.map((item) => {
+        if (eventInsideArea(ePos, item.coords)) item.origin = true;
+        return item;
+      });
+      this.target = e.target;
+      this.posOrigin = getPositionEvent(e);
+      this.addEvents();
+    }
   }
   addEvents () {
     touch(document, 'add', 'mousemove', this.moving);
@@ -52,10 +58,18 @@ class Drag {
 
     if(holder.length > 0) {
       holder[0].el.appendChild(this.target);
+      this.last = {
+        el: this.target,
+        cont: holder[0].el
+      }
+      this.cb();
     }
 
     this.target.style.transform = 'translate(0, 0)';
     this.removeEvents();
+  }
+  destroy() {
+    touch(document, 'remove', 'mousedown', this.start);
   }
 }
 
