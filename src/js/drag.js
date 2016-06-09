@@ -1,12 +1,19 @@
 class Drag {
-  constructor (el) {
+  constructor (el, holder) {
+    this.holders = Array.from(document.querySelectorAll(holder)).map(item => (
+      {
+        el: item,
+        coords: item.getBoundingClientRect()
+      }
+    ))
+
+    this.moving = this.createMoving.bind(this);
+    this.unmoving = this.deleteMoving.bind(this);
+
     touch(document, 'add', 'mousedown', (e) => {
       if (e.which > 1) return;
       this.target = e.target;
       this.posOrigin = getPositionEvent(e);
-      this.moving = this.createMoving.bind(this);
-      this.unmoving = this.deleteMoving.bind(this);
-
       if (this.target.matches(el)) {
         this.addEvents();
       }
@@ -17,8 +24,8 @@ class Drag {
     touch(document, 'add', 'mouseup', this.unmoving);
   }
   removeEvents () {
-    touch(document, 'remove', 'mousemove', this.moving)
-    touch(document, 'remove', 'mouseup', this.unmoving)
+    touch(document, 'remove', 'mousemove', this.moving);
+    touch(document, 'remove', 'mouseup', this.unmoving);
   }
   moveTarget (event) {
     let origin = this.posOrigin;
@@ -30,17 +37,27 @@ class Drag {
     this.moveTarget(e);
   }
   deleteMoving (e) {
-    if(!e.target.matches('.dest-opt')) {
-      this.target.style.transform = 'translate(0, 0)';
+    let ePos = getPositionEvent(e);
+    let holder = this.holders.reduce((prev, item) => {
+      if ((item.coords.left <= ePos.clientX ) && ( ePos.clientX <= item.coords.right) && (item.coords.top <= ePos.clientY) && (ePos.clientY <= item.coords.bottom)) {
+        prev = item.el;
+      }
+      return prev;
+    }, null);
+
+    if(holder) {
+      holder.appendChild(this.target);
     }
-    this.removeEvents()
+
+    this.target.style.transform = 'translate(0, 0)';
+    this.removeEvents();
   }
 }
 
 // Helper functions for Drag class
 
 function getPositionEvent(e) {
-  let {clientX, clientY} = e.touches ? e.touches[0] : e;
+  let {clientX, clientY} = e.touches ? e.touches[0] || e.changedTouches[0] : e;
   return {clientX, clientY};
 }
 

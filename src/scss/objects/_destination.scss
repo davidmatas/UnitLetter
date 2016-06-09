@@ -1,10 +1,8 @@
 .dest {
   border-radius: 5px 5px 0 0;
-  bottom: 0;
-  box-shadow: 0 -4px 10px 1px rgba(0, 0, 0, .1);
+  box-shadow: 0 4px 10px 1px rgba(0, 0, 0, .1);
   display: flex;
   height: $dest-height;
-  position: fixed;
   width: 100%;
 
   user-select: none;
@@ -19,20 +17,42 @@
 
 .dest-opt {
   align-content: center;
-  align-items: center;
   border-right: 1px solid #ccc;
   display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
   font-size: 40px;
-  justify-content: center;
   position: relative;
+  width: 100%;
 
   &:last-child {
     border: none;
   }
+
 }
 
-.no-start:after {
+.dest-opt-header {
+  height: 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.dest-holder {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  padding: 20px;
+  width: 100%;
+}
+
+.no-start .dest-opt-header:after {
   content: '🚫';
   font-size: 1.5em;
   left: 50%;
