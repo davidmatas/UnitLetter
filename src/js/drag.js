@@ -1,54 +1,68 @@
+/**
+ * Drag Class
+ *
+ * @param  {[Object]} options:
+ *   el:       {[String]} - Element that would be dragable by selector
+ *   holders:  {[Array]} - Array of DOM Nodes between elements will be dragables
+ *   callback: {[Function]} - Callback to be executed when release the element
+ */
 class Drag {
+
   constructor (options) {
-    Object.assign(this, options);
-    this.moving   = this.createMoving.bind(this);
-    this.unmoving = this.deleteMoving.bind(this);
-    this.start    = this.init.bind(this);
-    this.holders  = Array.from(document.querySelectorAll(this.holder.join(', '))).map(item => (
+    Object.assign(this, options)
+    this.moving       = this.createMoving.bind(this)
+    this.unmoving     = this.deleteMoving.bind(this)
+    this.start        = this.init.bind(this)
+    this.holdersStore = this.holders.map(item => (
       {
         el: item,
         coords: item.getBoundingClientRect()
       }
     ));
-    this.last;
-    this.target;
-    this.posOrigin;
-
+    this.last
+    this.target
+    this.posOrigin
     touch(document, 'add', 'mousedown', this.start)
   }
+
   init (e) {
     if (e.which > 1) return;
     if (e.target.matches(this.el)) {
-      let ePos = getPositionEvent(e);
-      this.holders = this.holders.map((item) => {
-        if (eventInsideArea(ePos, item.coords)) item.origin = true;
-        return item;
+      let ePos = getPositionEvent(e)
+      this.holdersStore = this.holdersStore.map((item) => {
+        if (eventInsideArea(ePos, item.coords)) item.origin = true
+        return item
       });
-      this.target = e.target;
-      this.posOrigin = getPositionEvent(e);
-      this.addEvents();
+      this.target = e.target
+      this.posOrigin = getPositionEvent(e)
+      this.addEvents()
     }
   }
+
   addEvents () {
-    touch(document, 'add', 'mousemove', this.moving);
-    touch(document, 'add', 'mouseup', this.unmoving);
+    touch(document, 'add', 'mousemove', this.moving)
+    touch(document, 'add', 'mouseup', this.unmoving)
   }
+
   removeEvents () {
-    touch(document, 'remove', 'mousemove', this.moving);
-    touch(document, 'remove', 'mouseup', this.unmoving);
+    touch(document, 'remove', 'mousemove', this.moving)
+    touch(document, 'remove', 'mouseup', this.unmoving)
   }
+
   moveTarget (event) {
-    let origin = this.posOrigin;
-    let posEvent = getPositionEvent(event);
-    this.target.style.transform = `translate(${posEvent.clientX - origin.clientX}px, ${posEvent.clientY - origin.clientY}px)`;
+    let origin = this.posOrigin
+    let posEvent = getPositionEvent(event)
+    this.target.style.transform = `translate(${posEvent.clientX - origin.clientX}px, ${posEvent.clientY - origin.clientY}px)`
   }
+
   createMoving (e) {
-    e.preventDefault();
-    this.moveTarget(e);
+    e.preventDefault()
+    this.moveTarget(e)
   }
+
   deleteMoving (e) {
-    let ePos = getPositionEvent(e);
-    let holder = this.holders.filter(item => {
+    let ePos = getPositionEvent(e)
+    let holder = this.holdersStore.filter(item => {
       if (item.origin) item.origin = false
       else {
         return eventInsideArea(ePos, item.coords)
@@ -56,19 +70,20 @@ class Drag {
     });
 
     if(holder.length > 0) {
-      holder[0].el.appendChild(this.target);
+      holder[0].el.appendChild(this.target)
       this.last = {
         el: this.target,
         cont: holder[0].el
       }
-      this.callback();
+      this.callback()
     }
 
-    this.target.style.transform = 'translate(0, 0)';
-    this.removeEvents();
+    this.target.style.transform = 'translate(0, 0)'
+    this.removeEvents()
   }
+
   destroy() {
-    touch(document, 'remove', 'mousedown', this.start);
+    touch(document, 'remove', 'mousedown', this.start)
   }
 }
 
@@ -79,8 +94,8 @@ function eventInsideArea(e, area) {
 }
 
 function getPositionEvent(e) {
-  let {clientX, clientY} = e.touches ? e.touches[0] || e.changedTouches[0] : e;
-  return {clientX, clientY};
+  let {clientX, clientY} = e.touches ? e.touches[0] || e.changedTouches[0] : e
+  return {clientX, clientY}
 }
 
 function touch(el, op, type, fn) {
@@ -99,4 +114,4 @@ function touch(el, op, type, fn) {
   }
 }
 
-export default Drag;
+export default Drag

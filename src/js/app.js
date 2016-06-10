@@ -7,7 +7,7 @@ import '../scss/style.scss'
 class Exercise extends React.Component {
   render() {
     return (
-      <UnitLetters units={units} container="card-holder" />
+      <UnitLetters units={units} container="cardHolder" />
     )
   }
 }
