@@ -1,11 +1,10 @@
 class Drag {
-  constructor (el, holder, cb) {
-    this.el       = el;
-    this.cb       = cb;
+  constructor (options) {
+    Object.assign(this, options);
     this.moving   = this.createMoving.bind(this);
     this.unmoving = this.deleteMoving.bind(this);
     this.start    = this.init.bind(this);
-    this.holders  = Array.from(document.querySelectorAll(holder.join(', '))).map(item => (
+    this.holders  = Array.from(document.querySelectorAll(this.holder.join(', '))).map(item => (
       {
         el: item,
         coords: item.getBoundingClientRect()
@@ -62,7 +61,7 @@ class Drag {
         el: this.target,
         cont: holder[0].el
       }
-      this.cb();
+      this.callback();
     }
 
     this.target.style.transform = 'translate(0, 0)';

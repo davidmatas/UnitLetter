@@ -1,6 +1,6 @@
 import Drag from './drag';
 
-class UnitLetters  {
+class Unit  {
   constructor (itemsContainer) {
     this.itemsContainer = itemsContainer;
     this.items          = document.querySelector(itemsContainer).children;
@@ -42,4 +42,4 @@ class UnitLetters  {
   }
 }
 
-export default UnitLetters;
+export default Unit;

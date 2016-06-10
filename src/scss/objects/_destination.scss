@@ -52,7 +52,7 @@
   width: 100%;
 }
 
-.no-start .dest-opt-header:after {
+.dest-opt:last-child .dest-opt-header:after {
   content: '🚫';
   font-size: 1.5em;
   left: 50%;

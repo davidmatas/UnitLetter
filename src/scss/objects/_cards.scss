@@ -25,6 +25,7 @@
   height: 100px;
   justify-content: center;
   margin: 10px;
+  text-transform: capitalize;
   width: 100px;
   @include accelerate(transform);
 
